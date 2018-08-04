@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  bigserene_sdk:
+    container_name: bigserene_sdk
+    image: bigserene_sdk
+    build:
+      context: .
+      args:
+        EXTRAS: "[test]"
+    tty: true
+    entrypoint: ["bash"]
+    volumes:
+      - .:/bigserene_sdk
