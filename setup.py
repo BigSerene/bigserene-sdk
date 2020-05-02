@@ -6,8 +6,9 @@ setup(
     version="0.1",
     description="Bigserene SDK to access Bigserene App Platform",
     author="Chris Lee",
-    author_email="chrisl@bigseren.com",
-    packages=["bigserene_sdk"],
-    install_requires=[],
-    extras_require={"test": ["pytest"]},
+    author_email="chrisl@bigserene.com",
+    packages=["bigserene_sdk", "bscli"],
+    install_requires=["click==7.0", "pytz==2020.1", "requests==2.21.0", "tqdm==4.45.0"],
+    extras_require={"test": ["pytest==4.0.0"]},
+    scripts=["bin/bscli"],
 )
