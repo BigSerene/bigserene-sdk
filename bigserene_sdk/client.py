@@ -22,7 +22,6 @@ class BigsereneClient(object):
             self.login(self._email, self._password)
 
     def login(self, email, password):
-        print(email, password)
         return self.post(
             "/api/auth/login", json={"email": email, "password": password}, login=False
         )

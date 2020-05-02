@@ -9,7 +9,7 @@ class Config(object):
 
     def __init__(self, **attrs):
         for key, value in attrs.items():
-            if hasattr(self, key):
+            if hasattr(self, key) and value:
                 setattr(self, key, value)
 
     @classmethod

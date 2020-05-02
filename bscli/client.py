@@ -1,5 +1,7 @@
 from bigserene_sdk.report import ReportClient
 from bigserene_sdk.config import Config
 
-config = Config.from_file("bigserene.ini")
-client = ReportClient(config)
+
+def client_from_config(config_file, profile):
+    config = Config.from_file(config_file, profile=profile)
+    return ReportClient(config)
