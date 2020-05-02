@@ -6,18 +6,33 @@ from bscli.client import client_from_config
 
 
 @click.group()
-@click.option("--file", "-f", "config_file", default="bigserene.ini")
-@click.option("--profile", "-p", "profile", default="default")
+@click.option(
+    "--file",
+    "-f",
+    "config_file",
+    default="bigserene.ini",
+    help="Bigserene SDK Configuration File to load",
+)
+@click.option(
+    "--profile",
+    "-p",
+    "profile",
+    default="default",
+    help="Bigserene SDK Profile to use from configuration file",
+)
 @click.pass_context
 def main(ctx, config_file, profile):
     ctx.ensure_object(dict)
     ctx.obj["client"] = client_from_config(config_file, profile=profile)
 
 
-@main.command("check")
+@main.command("download")
 @click.argument("report_ids", nargs=-1, type=int)
 @click.pass_context
-def check(ctx, report_ids):
+def download_report(ctx, report_ids):
+    """
+    Given report_ids, check status & download results for each
+    """
     client = ctx.obj["client"]
     for report_id in report_ids:
         try:
@@ -35,6 +50,9 @@ def check(ctx, report_ids):
 @click.argument("report_ids", nargs=-1, type=int)
 @click.pass_context
 def run(ctx, report_ids):
+    """
+    Re-run an existing report from the command line
+    """
     client = ctx.obj["client"]
     for report_id in report_ids:
         report = client.run_report(report_id)
@@ -45,6 +63,9 @@ def run(ctx, report_ids):
 @click.option("--brand")
 @click.pass_context
 def list_reports(ctx, brand=None):
+    """
+    List reports that you have access to
+    """
     client = ctx.obj["client"]
     opts = {}
     if brand:
@@ -59,6 +80,9 @@ def list_reports(ctx, brand=None):
 @click.argument("report_ids", nargs=-1, type=int)
 @click.pass_context
 def get_report(ctx, report_ids):
+    """
+    Given report IDs, print out metadata for the associated Reports
+    """
     client = ctx.obj["client"]
     for report_id in report_ids:
         report = client.get_report(report_id)
