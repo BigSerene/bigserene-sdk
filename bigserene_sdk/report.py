@@ -65,7 +65,7 @@ INSTAGRAM_BRANDS: {self.instagram_brands}
 INSTAGRAM_ID: {self.instagram_id}
 BRAND: {self.brand}
 JOB_ID: {self.job_id}
-CREATED_AT: {self.created_at}
+CREATED_AT: {self.created_date}
 URL: {self.url}
 TABLES: {self.tables}
 STATUS: {self.status}

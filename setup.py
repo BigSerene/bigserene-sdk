@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="bigserene_sdk",
-    version="0.1",
+    version="0.2",
     description="Bigserene SDK to access Bigserene App Platform",
     author="Chris Lee",
     author_email="chrisl@bigserene.com",
