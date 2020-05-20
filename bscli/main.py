@@ -1,7 +1,7 @@
 import traceback
 import click
 
-from bigserene_sdk.report import Report
+from bigserene_sdk.reports import Report
 from bscli.client import client_from_config
 
 

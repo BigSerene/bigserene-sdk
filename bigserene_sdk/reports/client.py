@@ -8,83 +8,13 @@ import time
 from typing import Dict, List
 from pathlib import Path
 
-from .client import BigsereneClient
-
-
-class Report(object):
-    id = None
-    user_id = None
-    ad_account_id = None
-    instagram_brands = None
-    instagram_id = None
-    brand = None
-    job_id = None
-    created_at = None
-    url = None
-    tables = None
-    status = None
-    error = None
-
-    def __init__(self, **values):
-        for key, value in values.items():
-            if hasattr(self, key) and not key.startswith("_"):
-                setattr(self, key, value)
-
-    @property
-    def created_date(self):
-        date = datetime.datetime.fromtimestamp(self.created_at).astimezone(
-            pytz.timezone("est")
-        )
-        return date.strftime("%Y-%m-%d, %I:%M:%S %p")
-
-    @classmethod
-    def from_json(cls, values):
-        report = cls()
-        report.update_values(values)
-        return report
-
-    def update_values(self, values):
-        for key, value in values.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
-
-    @property
-    def output_dir(self):
-        return Path("reports", self.brand, str(self.id))
-
-    def __repr__(self):
-        return f"Report[{self.created_date}, {self.id}, {self.status}, {self.brand}, ig:{','.join(sorted(self.instagram_brands))}]"
-
-    @property
-    def detailed(self):
-        return f"""
-ID: {self.id}
-USER_ID: {self.user_id}
-AD_ACCOUNT_ID: {self.ad_account_id}
-INSTAGRAM_BRANDS: {self.instagram_brands}
-INSTAGRAM_ID: {self.instagram_id}
-BRAND: {self.brand}
-JOB_ID: {self.job_id}
-CREATED_AT: {self.created_date}
-URL: {self.url}
-TABLES: {self.tables}
-STATUS: {self.status}
-ERROR: {self.error}"""
+from bigserene_sdk.client import BigsereneClient
+from .report import Report
 
 
 class ReportClient(BigsereneClient):
     def status(self, report: Report):
         return self.get(f"/api/reports/{report.id}/status")["ready"]
-
-    def download(self, url, output_path=None):
-        file_bytes = self.session.get(url).content
-        if output_path:
-            path = Path(output_path)
-            with path.open("wb") as f:
-                f.write(file_bytes)
-            return str(output_path.resolve())
-        else:
-            return file_bytes
 
     def get_report(self, report_id: int) -> Report:
         report_json = self.get(f"/api/reports/{report_id}")

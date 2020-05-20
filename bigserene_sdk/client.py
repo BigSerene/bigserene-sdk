@@ -1,6 +1,7 @@
 """
 Bigserene Client Configuration
 """
+from pathlib import Path
 from functools import wraps
 
 import requests
@@ -25,6 +26,16 @@ class BigsereneClient(object):
         return self.post(
             "/api/auth/login", json={"email": email, "password": password}, login=False
         )
+
+    def download(self, url, output_path=None):
+        file_bytes = self.session.get(url).content
+        if output_path:
+            path = Path(output_path)
+            with path.open("wb") as f:
+                f.write(file_bytes)
+            return str(output_path.resolve())
+        else:
+            return file_bytes
 
     def _request(self, fn):
         @wraps(fn)

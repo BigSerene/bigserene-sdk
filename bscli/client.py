@@ -1,4 +1,4 @@
-from bigserene_sdk.report import ReportClient
+from bigserene_sdk.reports import ReportClient
 from bigserene_sdk.config import Config
 
 
