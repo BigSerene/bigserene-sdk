@@ -63,14 +63,22 @@ class ReportClient(BigsereneClient):
         report_dir = report.output_dir
         report_dir.mkdir(exist_ok=True, parents=True)
         for filename, url in report.tables.items():
-            result = self.download(url, report_dir / filename)
+            result_path = report_dir / filename.split(".")[0]
+            result = self.download(url, result_path / filename)
+            report_json = json.load(Path(result_path / filename).open("r"))
+            self.download_images(report_json, result_path)
 
-        result = report_dir / "all_metrics.json"
-        if result.exists():
-            report_json = json.load(Path(result).open("r"))
-            for group_number, group_json in report_json.items():
-                group_dir = report_dir / str(group_number)
-                group_dir.mkdir(exist_ok=True, parents=True)
-                for url in group_json["rep_images"]:
-                    self.download(url, (group_dir / url.rsplit("/", 1)[-1]))
         return str(report_dir.resolve())
+
+    def download_images(self, json_dict, dst_dir):
+        if isinstance(json_dict, list):
+            for item in json_dict:
+                return self.download_images(item, dst_dir)
+        elif isinstance(json_dict, dict):
+            if "rep_images" in json_dict:
+                for url in json_dict["rep_images"]:
+                    self.download(url, (dst_dir / "images" / url.rsplit("/", 1)[-1]))
+            for key, value in json_dict.items():
+                self.download_images(value, dst_dir / key)
+        else:
+            return

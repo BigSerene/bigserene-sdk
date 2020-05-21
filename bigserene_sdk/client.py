@@ -31,6 +31,7 @@ class BigsereneClient(object):
         file_bytes = self.session.get(url).content
         if output_path:
             path = Path(output_path)
+            path.parent.mkdir(exist_ok=True, parents=True)
             with path.open("wb") as f:
                 f.write(file_bytes)
             return str(output_path.resolve())
