@@ -66,7 +66,7 @@ class ReportClient(BigsereneClient):
             result_path = report_dir / filename.split(".")[0]
             result = self.download(url, result_path / filename)
             report_json = json.load(Path(result_path / filename).open("r"))
-            self.download_images(report_json, result_path)
+            self.download_images(report_json, result_path / "files")
 
         return str(report_dir.resolve())
 
@@ -75,10 +75,8 @@ class ReportClient(BigsereneClient):
             for item in json_dict:
                 return self.download_images(item, dst_dir)
         elif isinstance(json_dict, dict):
-            if "rep_images" in json_dict:
-                for url in json_dict["rep_images"]:
-                    self.download(url, (dst_dir / "images" / url.rsplit("/", 1)[-1]))
             for key, value in json_dict.items():
                 self.download_images(value, dst_dir / key)
-        else:
-            return
+        elif isinstance(json_dict, str):
+            if json_dict.startswith("https://api.bigserene.com/files"):
+                self.download(json_dict, (dst_dir / json_dict.rsplit("/", 1)[-1]))
