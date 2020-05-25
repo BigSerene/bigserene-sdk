@@ -15,6 +15,19 @@ pip3 install git+https://github.com/BigSerene/bigserene-sdk.git --user
 
 The SDK BigsereneClient class takes in a Config object that can be populated in code or by file. Files accepted are .ini files as shown in `bigserene.sample.ini`. Each section in the configuration file represents a profile. You can pass in a profile when calling `Config.from_file` to specify the profile to use; otherwise, the `default` profile is used.
 
+## Setting Up Credentials
+
+1. Copy the `bigserene.sample.ini` as `bigserene.ini` in the directory you will be working in or in your \$HOME directory.
+2. Open the `bigserene.ini` and fill in the email & password associated with your Bigserene App account. Example:
+
+```
+[default]
+email = user@example.com
+password = password123
+```
+
+3. Test your access by running `bscli list`. You should not receive a Permission error.
+
 ## Command Line
 
 ```bash
