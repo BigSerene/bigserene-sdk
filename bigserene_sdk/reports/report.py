@@ -45,7 +45,7 @@ class Report(object):
 
     @property
     def output_dir(self):
-        return Path("reports", self.brand, str(self.id))
+        return Path("reports", str(self.user_id), str(self.id))
 
     def __repr__(self):
         return f"Report[{self.created_date}, {self.id}, {self.status}, {self.brand}, ig:{','.join(sorted(self.instagram_brands))}]"
